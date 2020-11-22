@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "OMDB_MVVM_RxJava2_Dagger2"
