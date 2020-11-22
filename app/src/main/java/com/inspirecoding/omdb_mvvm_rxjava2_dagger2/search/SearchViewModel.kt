@@ -17,21 +17,6 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subscribers.DisposableSubscriber
 import javax.inject.Inject
 
-class SearchViewModelFactory @Inject constructor(
-    private val movieRepository: MovieRepository
-) : ViewModelProvider.Factory  {
-
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-
-        if(modelClass.isAssignableFrom(SearchViewModel::class.java)) {
-            return SearchViewModel(movieRepository) as T
-        }
-
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-
-
 class SearchViewModel @Inject constructor (
     private val movieRepository: MovieRepository
 ): ViewModel() {

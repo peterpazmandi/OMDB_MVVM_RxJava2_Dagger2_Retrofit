@@ -1,10 +1,8 @@
 package com.inspirecoding.omdb_mvvm_rxjava2_dagger2.di
 
 import android.app.Application
-import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.di.module.ActivityBuilderModule
-import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.di.module.FragmentBuilderModule
-import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.di.module.MovieRepositoryModule
-import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.di.module.RetrofitModule
+import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.MyApp
+import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.di.module.*
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -19,7 +17,9 @@ import javax.inject.Singleton
         RetrofitModule::class,
         MovieRepositoryModule::class,
         ActivityBuilderModule::class,
-        FragmentBuilderModule::class
+        FragmentBuilderModule::class,
+        ViewModelFactoryModule::class,
+        ViewModelsModule::class
     ]
 )
 

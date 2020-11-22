@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.R
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.utils.Status
+import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.viewmodelprovider.ViewModelFactory
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -18,7 +19,7 @@ class SearchFragment : DaggerFragment() {
     private val TAG = this.javaClass.simpleName
 
     @Inject
-    lateinit var viewModelFactory: SearchViewModelFactory
+    lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: SearchViewModel
 
     override fun onCreateView(
