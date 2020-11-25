@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">OMDB_MVVM_RxJava2_Dagger2</string>
+    <string name="search_movie_here">Search movie here</string>
+    <string name="type_at_least_four_characters">Type at least 4 characters!</string>
+    <string name="no_movie_found">No movie found</string>
 </resources>

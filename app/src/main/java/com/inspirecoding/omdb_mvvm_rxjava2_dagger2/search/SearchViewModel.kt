@@ -34,6 +34,7 @@ class SearchViewModel @Inject constructor (
         searchResultObservable = movieRepository.getSearchResultData(searchText, API_KEY, 1)
 
         moviesList.clear()
+
         _searchResult.postValue(Resource.success(arrayListOf<Search>()))
 
         val result = searchResultObservable
@@ -59,14 +60,17 @@ class SearchViewModel @Inject constructor (
                 }
             }
 
+            override fun onComplete() {
+                moviesList.sortByDescending {
+                    it.Year
+                }
+                _searchResult.postValue(Resource.success(moviesList))
+            }
+
             override fun onError(throwable: Throwable?) {
                 throwable?.message?.let {  errorMessage ->
                     _searchResult.postValue(Resource.error(errorMessage))
                 }
-            }
-
-            override fun onComplete() {
-                _searchResult.postValue(Resource.success(moviesList))
             }
 
         }
