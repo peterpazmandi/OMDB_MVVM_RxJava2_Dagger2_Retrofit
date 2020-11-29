@@ -1,12 +1,12 @@
 package com.inspirecoding.omdb_mvvm_rxjava2_dagger2.model
 
 data class Movie(
-    val Actors: String? = "",
-    val Awards: String? = "",
+    val Actors: String = "",
+    val Awards: String = "",
     val BoxOffice: String? = "",
     val Country: String? = "",
     val DVD: String? = "",
-    val Director: String? = "",
+    val Director: String = "",
     val Genre: String? = "",
     val Language: String? = "",
     val Metascore: String? = "",

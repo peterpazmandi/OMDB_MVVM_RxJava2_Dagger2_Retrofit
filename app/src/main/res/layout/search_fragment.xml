@@ -50,7 +50,7 @@
                         android:hint="@string/search_movie_here"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_searchIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"

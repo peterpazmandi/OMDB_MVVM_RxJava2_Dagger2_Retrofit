@@ -1,17 +1,24 @@
 package com.inspirecoding.omdb_mvvm_rxjava2_dagger2.search
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
+import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.R
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.databinding.SearchFragmentBinding
+import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.model.Search
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.search.adapter.SearchResultAdapter
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.utils.Status
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.utils.gone
@@ -21,7 +28,7 @@ import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
-class SearchFragment : DaggerFragment() {
+class SearchFragment : DaggerFragment(), SearchResultAdapter.OnItemClickListener {
 
     private val TAG = this.javaClass.simpleName
 
@@ -41,18 +48,25 @@ class SearchFragment : DaggerFragment() {
 
         binding = SearchFragmentBinding.inflate(layoutInflater, container, false)
 
+        sharedElementReturnTransition = TransitionInflater
+            .from(context)
+            .inflateTransition(android.R.transition.move)
+
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         viewModel = ViewModelProvider(this, viewModelFactory).get(SearchViewModel::class.java)
+
+        searchAdapter.listener = this
 
         initSearchResultAdapter()
         setupMoviesListObserver()
 
-        binding.etSearchField.addTextChangedListener {
-            searchItemWithDelay(it.toString())
+        binding.ivSearchIcon.setOnClickListener {
+            searchItemWithDelay(binding.etSearchField.text.toString())
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
@@ -69,9 +83,12 @@ class SearchFragment : DaggerFragment() {
                     _result.data?.let {
                         searchAdapter.updateItems(it)
 
-                        if (it.size > 0) isMovieFound(true) else isMovieFound(false)
+                        if (it.size > 0) {
+                            isMovieFound(true)
+                        } else {
+                            isMovieFound(false)
+                        }
                     }
-                    binding.swipeRefreshLayout.isRefreshing = false
                 }
 
                 Status.LOADING -> {
@@ -124,9 +141,30 @@ class SearchFragment : DaggerFragment() {
 
     private fun initSearchResultAdapter() {
 
+        postponeEnterTransition()
         binding.rvSearchResult.apply {
+            doOnPreDraw {
+                startPostponedEnterTransition()
+            }
+
+            itemAnimator = DefaultItemAnimator()
             this.adapter = searchAdapter
         }
+
+    }
+
+    override fun onItemClick(movie: Search, imageView: ImageView, textView: TextView) {
+
+        sharedElementEnterTransition = TransitionInflater
+            .from(context)
+            .inflateTransition(android.R.transition.move)
+
+        val action = SearchFragmentDirections.actionSearchFragmentToDetailFragment(movie)
+        val extras = FragmentNavigatorExtras(
+            imageView to movie.Poster,
+            textView to movie.Title
+        )
+        findNavController().navigate(action, extras)
 
     }
 

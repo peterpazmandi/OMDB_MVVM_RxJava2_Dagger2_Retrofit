@@ -17,4 +17,27 @@ class MainActivity : AppCompatActivity() {
 
         navController = this.findNavController(R.id.host_fragment)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

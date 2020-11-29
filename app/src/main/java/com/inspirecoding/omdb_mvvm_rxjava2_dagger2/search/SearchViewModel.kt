@@ -1,9 +1,6 @@
 package com.inspirecoding.omdb_mvvm_rxjava2_dagger2.search
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.model.Resource
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.model.Search
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.model.SearchResults
@@ -15,6 +12,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subscribers.DisposableSubscriber
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor (
@@ -35,16 +34,37 @@ class SearchViewModel @Inject constructor (
 
         moviesList.clear()
 
-        _searchResult.postValue(Resource.success(arrayListOf<Search>()))
-
         val result = searchResultObservable
             .onBackpressureBuffer()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .flatMap {
-                Flowable.fromIterable(it.Search)
-            }
-            .subscribeWith(createSearchResultObserver())
+//            .flatMap {
+//                Flowable.fromIterable(it.Search)
+//            }
+            .subscribe(
+                { searchResult ->
+                    _searchResult.postValue(Resource.loading())
+
+                    searchResult?.Search?.let { articlesList ->
+
+                        moviesList.addAll(articlesList)
+                        moviesList.sortByDescending {
+                            it.Year
+                        }
+                        _searchResult.postValue(Resource.success(moviesList))
+
+                    }
+
+                },{ throwable ->
+                    throwable?.message?.let {  errorMessage ->
+                        _searchResult.postValue(Resource.error(errorMessage))
+                    }
+
+                }
+            )
+
+
+//            .subscribeWith(createSearchResultObserver())
 
         compositeDisposable.add(result)
     }
