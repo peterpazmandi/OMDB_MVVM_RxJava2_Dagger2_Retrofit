@@ -21,6 +21,7 @@ import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.databinding.SearchFragmentBin
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.model.Search
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.search.adapter.SearchResultAdapter
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.utils.Status
+import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.utils.dismissKeyboard
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.utils.gone
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.utils.visible
 import com.inspirecoding.omdb_mvvm_rxjava2_dagger2.viewmodelprovider.ViewModelFactory
@@ -67,6 +68,7 @@ class SearchFragment : DaggerFragment(), SearchResultAdapter.OnItemClickListener
 
         binding.ivSearchIcon.setOnClickListener {
             searchItemWithDelay(binding.etSearchField.text.toString())
+            context?.dismissKeyboard(it)
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
