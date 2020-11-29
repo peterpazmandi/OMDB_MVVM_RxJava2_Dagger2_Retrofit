@@ -12,3 +12,5 @@ The app follow the **MVVM software architectural pattern** and uses the below li
 * Navigation Component
 
 The app contains **shared elements** animation and a collapsing toolbar effect which was implemented with **MotionLayout**.
+
+### [Sample video on my YouTube channel!](https://www.youtube.com/watch?v=pldSz3qHaIQ)
